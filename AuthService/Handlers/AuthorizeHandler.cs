@@ -4,6 +4,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using System.Text.Json;
 
 namespace AuthService.Routs
 {
@@ -13,17 +14,19 @@ namespace AuthService.Routs
         {
             var email = context.Request.Form["email"].FirstOrDefault();
             var password = context.Request.Form["password"].FirstOrDefault();
-
-            
+ 
             var user = await dbContext.Users.FirstOrDefaultAsync(u => u.Email == email && u.Password == password);
             if (user == null)
             {
+                var errorMessage = new
+                {
+                    Message = "Invalid email or password"
+                };
                 context.Response.StatusCode = StatusCodes.Status401Unauthorized;
-                await context.Response.WriteAsync("Invalid email or password");
+                await context.Response.WriteAsync(JsonSerializer.Serialize(errorMessage));
                 return;
             }
 
-            
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes("CatwIthmeowanDsUshieaTiNggoodyeS");
             var tokenDescriptor = new SecurityTokenDescriptor
@@ -37,8 +40,13 @@ namespace AuthService.Routs
             };
             var accessToken = tokenHandler.CreateToken(tokenDescriptor);
 
+            var response = new
+            {
+                AccessToken = tokenHandler.WriteToken(accessToken)
+            };
+
             context.Response.StatusCode = StatusCodes.Status200OK;
-            await context.Response.WriteAsync(tokenHandler.WriteToken(accessToken));
+            await context.Response.WriteAsync(JsonSerializer.Serialize(response));
         }
     }
 }

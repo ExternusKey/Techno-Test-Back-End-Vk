@@ -1,5 +1,4 @@
-﻿using AuthService.Data;
-using AuthService.Routs;
+﻿using AuthService.Routs;
 
 namespace AuthService.Handlers
 {
@@ -11,17 +10,13 @@ namespace AuthService.Handlers
             {
                 
                 var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Index.html");
-
                 if (File.Exists(filePath))
-                {
-                    
+                {        
                     var content = await File.ReadAllTextAsync(filePath);
                     await context.Response.WriteAsync(content);
                 }
                 else
-                {
                     context.Response.StatusCode = 404;
-                }
             });
             app.MapPost("/register", RegisterHandler.Handle);
             app.MapPost("/authorize", AuthorizeHandler.Handle);

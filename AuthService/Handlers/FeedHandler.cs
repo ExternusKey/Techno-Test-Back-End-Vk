@@ -1,7 +1,7 @@
-﻿using AuthService.Data;
-using Microsoft.IdentityModel.Tokens;
+﻿using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
+using System.Text.Json;
 
 namespace AuthService.Routs
 {
@@ -10,8 +10,7 @@ namespace AuthService.Routs
         public static async Task Handle(HttpContext context)
         { 
             var token = context.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
-
-            
+         
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes("CatwIthmeowanDsUshieaTiNggoodyeS");
 
@@ -28,12 +27,15 @@ namespace AuthService.Routs
             }
             catch
             {
+                var errorMessage = new
+                {
+                    Message = "Invalid token"
+                };
                 context.Response.StatusCode = StatusCodes.Status401Unauthorized;
-                await context.Response.WriteAsync("Invalid token");
+                await context.Response.WriteAsync(JsonSerializer.Serialize(errorMessage));
                 return;
             }
-
-            
+  
             context.Response.StatusCode = StatusCodes.Status200OK;
         }
     }
