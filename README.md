@@ -19,6 +19,12 @@
       
 ***
 ## _Инструкция_
+Установка NuGet пакетов:
+   ```
+   dotnet add package Microsoft.AspNetCore.Authentication.JwtBearer
+   dotnet add package Microsoft.EntityFrameworkCore.Tools
+   dotnet add package Microsoft.EntityFrameworkCore.SqlServer
+   ```
 В качестве СУБД был выбран локальный MSSQL Server, поэтому Вам придётся осуществить настройку базы данных самостоятельно. Инструкция ниже.
 
 Для успешной миграции и создания базы данных требуется:
