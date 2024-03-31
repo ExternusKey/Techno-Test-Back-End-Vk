@@ -1,6 +1,6 @@
 # Профильное задание на позицию стажера "Back-End Developer"
 ## _Стажировка Вконтакте_
-Условие:
+Условия задачи:  
 Необходимо разработать упрощенный сервис с регистрацией и авторизацией.
 Хранить данные можно в любой реляционной СУБД.
 
@@ -19,6 +19,12 @@
       
 ***
 ## _Инструкция_
+Установка NuGet пакетов:
+   ```
+   dotnet add package Microsoft.AspNetCore.Authentication.JwtBearer
+   dotnet add package Microsoft.EntityFrameworkCore.Tools
+   dotnet add package Microsoft.EntityFrameworkCore.SqlServer
+   ```
 В качестве СУБД был выбран локальный MSSQL Server, поэтому Вам придётся осуществить настройку базы данных самостоятельно. Инструкция ниже.
 
 Для успешной миграции и создания базы данных требуется:
@@ -31,3 +37,32 @@
    ```
    Update-Database
    ```
+***
+## _Примеры запросов_
+В качестве приложения для тестирования API-запросов был выбран Postman.  
+
+1. Регистрация нового пользователя
+   - Метод: POST
+   - URL: ```http://localhost:port/register```
+   - Тело запроса (JSON):
+     ```json
+        {
+          "Email": "example@example.com",
+          "Password": "password123"
+        }
+     ```
+2. Аутентификация пользователя
+   - Метод: POST
+   - URL: ```http://localhost:port/authorize```
+   - Тело запроса (JSON):
+     ```json
+        {
+          "Email": "example@example.com",
+          "Password": "password123"
+        }
+     ```
+3. Проверка авторизации
+   - Метод: GET
+   - URL: ```http://localhost:port/feed```
+   - Заголовок Authorization: Bearer {AccessToken}
+   - {AccessToken} - токен доступа, полученный после аутентификации.
