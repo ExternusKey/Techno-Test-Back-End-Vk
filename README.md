@@ -19,32 +19,23 @@
       
 ***
 ## _Инструкция_
-Установка NuGet пакетов:
+Установновленные NuGet пакеты:
    ```
    dotnet add package Microsoft.AspNetCore.Authentication.JwtBearer
    dotnet add package Microsoft.EntityFrameworkCore.Tools
    dotnet add package Microsoft.EntityFrameworkCore.SqlServer
+   dotnet add package Microsoft.EntityFrameworkCore.Design
    ```
-В качестве СУБД был выбран локальный MSSQL Server, поэтому Вам придётся осуществить настройку базы данных самостоятельно. Инструкция ниже.
-
-Для успешной миграции и создания базы данных требуется:
-1. Открыть PowerShell в директории проекта
-2. Осуществить миграцию базы данных с помощью консольной команды:
-   ```
-   Add-Migration InitialCreate
-   ```
-3. Применить миграцию с помощью консольной команды:
-   ```
-   Update-Database
-   ```
+В качестве СУБД был выбран локальный MSSQL Server. База данных создаётся при первом запросе (регистрация).  
+Docker контейнер присутствует (AuthServicePublished). 
 ***
 ## _Примеры запросов_
 В качестве приложения для тестирования API-запросов был выбран Postman.  
-
+При запуске приложение через контейнер порт соответствует 5000. При запуске через IDE - выбирается случайно.  
 1. Регистрация нового пользователя
    - Метод: POST
-   - URL: ```http://localhost:port/register```
-   - Тело запроса (JSON):
+   - URL: ```http://localhost:5000/register```
+   - Тело запроса (form-data):
      ```json
         {
           "Email": "example@example.com",
@@ -53,8 +44,8 @@
      ```
 2. Аутентификация пользователя
    - Метод: POST
-   - URL: ```http://localhost:port/authorize```
-   - Тело запроса (JSON):
+   - URL: ```http://localhost:5000/authorize```
+   - Тело запроса (form-data):
      ```json
         {
           "Email": "example@example.com",
@@ -63,6 +54,6 @@
      ```
 3. Проверка авторизации
    - Метод: GET
-   - URL: ```http://localhost:port/feed```
+   - URL: ```http://localhost:5000/feed```
    - Заголовок Authorization: Bearer {AccessToken}
    - {AccessToken} - токен доступа, полученный после аутентификации.
